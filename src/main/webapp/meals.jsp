@@ -37,9 +37,9 @@
 
 
 <div id="modalWin">
-    <form class="transparent" method="POST" action="meals?action=edit">
+    <form class="transparent" method="POST" action="meals?action=add">
         <div class="form-inner">
-            <h3>Запись<a href=""><i class="icon fa fa-times"></i></a></h3>
+            <h3>Запись<a href="meals?action=meals"><i class="icon fa fa-times"></i></a></h3>
             <label for="datetime">Дата/время</label>
             <input id="datetime" type="datetime-local" name="datetime" value="<c:out value="${meal.dateTime}" />">
             <label for="description">Описание</label>

@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web;
 
-import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -13,15 +12,24 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 public class MealServlet extends HttpServlet {
-    private static final Logger log = getLogger(UserServlet.class);
+    public List<Meal> meals = new ArrayList(Arrays.asList(
+            new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
+            new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
+            new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
+            new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
+            new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
+            new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
+            new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
+    ));
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("PPPPPPPPPPPPPPPPPPPOST");
         doGet(request, response);
     }
 
@@ -29,28 +37,34 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        List<MealTo> mealsTo = null;
+        List<MealTo> mealsLocal = null;
 
         switch (action) {
             case "edit":
-                //mealsTo = edit(request, response);
-                //request.setAttribute("meals", mealsTo);
+                System.out.println("EEEEEEEEEEEEEDIT");
+                Meal meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
+                meals.add(meal);
+                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
                 break;
             case "delete":
                 //delete(request, response);
                 break;
             case "add":
-                Meal meal = new Meal(LocalDateTime.of(2020, Month.JANUARY, 1, 10, 0), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
-                MealsUtil.meals.add(meal);
-                mealsTo = MealsUtil.filteredByStreams(MealsUtil.meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
-                request.setAttribute("meals", mealsTo);
+                System.out.println("AAAAAAAAAADD");
+                meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
+                meals.add(meal);
+                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
                 break;
             case "meals":
-                mealsTo = MealsUtil.filteredByStreams(MealsUtil.meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
-                request.setAttribute("meals", mealsTo);
+                System.out.println("MMMMMMMMMMEALS");
+                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
+                break;
+            default:
+                System.out.println("DDDDDDDDEFAULT");
                 break;
         }
-        request.setAttribute("meals", mealsTo);
+
+        request.setAttribute("meals", mealsLocal);
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 }
