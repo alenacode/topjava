@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
@@ -20,56 +19,38 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
-    private List<Meal> meals = MealsUtil.meals;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        String action = request.getServletPath();
-        try{
-            switch (action) {
-                case "/form":
-                    edit(request, response);
-                    break;
-                case "/delete":
-                    delete(request, response);
-                    break;
-                case "/add":
-                    add(request, response);
-                    break;
-                default:
-                    show(request, response);
-                    System.out.println(request.getServletPath());
-                    break;
-            }
-        } catch (Exception e) {
-            log.debug("SQL_ERROR");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        List<MealTo> mealsTo = null;
+
+        switch (action) {
+            case "edit":
+                //mealsTo = edit(request, response);
+                //request.setAttribute("meals", mealsTo);
+                break;
+            case "delete":
+                //delete(request, response);
+                break;
+            case "add":
+                Meal meal = new Meal(LocalDateTime.of(2020, Month.JANUARY, 1, 10, 0), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
+                MealsUtil.meals.add(meal);
+                mealsTo = MealsUtil.filteredByStreams(MealsUtil.meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
+                request.setAttribute("meals", mealsTo);
+                break;
+            case "meals":
+                mealsTo = MealsUtil.filteredByStreams(MealsUtil.meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
+                request.setAttribute("meals", mealsTo);
+                break;
         }
-    }
-
-    private void show(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<MealTo> mealsTo = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
         request.setAttribute("meals", mealsTo);
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
-    }
-
-    private void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Meal meal = new Meal(LocalDateTime.of(2020, Month.JANUARY, 1, 10, 0), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
-        meals.add(meal);
-        List<MealTo> mealsTo = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
-        request.setAttribute("meals", mealsTo);
-        request.getRequestDispatcher("/meals.jsp").forward(request, response);
-    }
-
-    private void delete(HttpServletRequest request, HttpServletResponse response) {
-
-    }
-
-    private void add(HttpServletRequest request, HttpServletResponse response) {
-
     }
 }

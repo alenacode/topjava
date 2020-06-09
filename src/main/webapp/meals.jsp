@@ -28,7 +28,7 @@
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
             <td><a href="#modalWin" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-cogs" aria-hidden="true"></i></a></td>
-            <td><a href="" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-times-circle" aria-hidden="true"></i></a></td>
+            <td><a href="meals?action=delete" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-times-circle" aria-hidden="true"></i></a></td>
         </tr>
     </c:forEach>
     </tbody>
@@ -37,16 +37,15 @@
 
 
 <div id="modalWin">
-    <form class="transparent" action="meals" method="post">
+    <form class="transparent" method="POST" action="meals?action=edit">
         <div class="form-inner">
-            <h3>Запись</h3>
-            <a href=""><i class="icon fa fa-times fa-2x"></i></a>
+            <h3>Запись<a href=""><i class="icon fa fa-times"></i></a></h3>
             <label for="datetime">Дата/время</label>
-            <input id="datetime" type="datetime-local">
+            <input id="datetime" type="datetime-local" name="datetime" value="<c:out value="${meal.dateTime}" />">
             <label for="description">Описание</label>
-            <input id="description" type="text">
+            <input id="description" type="text" name="description" value="<c:out value="${meal.description}" />">
             <label for="calories">Калории</label>
-            <input id="calories" type="number">
+            <input id="calories" type="number" name="calories" value="<c:out value="${meal.calories}" />">
             <a href=""><button class="btn2">Сохранить</button></a>
         </div>
     </form>
