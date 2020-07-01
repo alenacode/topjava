@@ -7,6 +7,7 @@
     <title>Meals</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="style/styles.css">
+
 </head>
 <body>
 <h3><a href="index.html">Home</a></h3>
@@ -27,30 +28,51 @@
             </td>
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
-            <td><a href="#modalWin" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-cogs" aria-hidden="true"></i></a></td>
-            <td><a href="meals?action=delete" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-times-circle" aria-hidden="true"></i></a></td>
+            <td><a class="edit" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+            <td><a href="meals?action=delete" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-<a href="#modalWin"><button class="btn1">Добавить</button></a>
-
+<button class="btn1" id="add">Добавить</button>
 
 <div id="modalWin">
-    <form class="transparent" method="POST" action="meals?action=add">
+    <form class="transparent" method="POST">
         <div class="form-inner">
-            <h3>Запись<a href="meals?action=meals"><i class="icon fa fa-times"></i></a></h3>
+            <h3><span id="type"></span><a href="meals?action=meals"><i class="icon fa fa-times"></i></a></h3>
             <label for="datetime">Дата/время</label>
             <input id="datetime" type="datetime-local" name="datetime" value="<c:out value="${meal.dateTime}" />">
             <label for="description">Описание</label>
             <input id="description" type="text" name="description" value="<c:out value="${meal.description}" />">
             <label for="calories">Калории</label>
             <input id="calories" type="number" name="calories" value="<c:out value="${meal.calories}" />">
-            <a href=""><button class="btn2">Сохранить</button></a>
+            <button class="btn2">Сохранить</button>
         </div>
     </form>
 </div>
+<script>
+    let modal = document.getElementById('modalWin');
+    let btnAdd = document.getElementById('add');
+    let btnEdit = document.getElementsByClassName('edit');
 
+    btnAdd.onclick = function () {
+        document.getElementById("type").innerHTML = "ДОБАВИТЬ";
+        modal.style.display = "block";
+    }
+
+    btnEdit.onclick = function() {
+        for(let i = 0; i < btnEdit.length; ++i){
+            document.getElementById("type").innerHTML = "РЕДАКТИРОВАТЬ";
+            modal.style.display = "block";
+        }
+    }
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 
 </body>
 </html>

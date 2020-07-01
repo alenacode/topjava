@@ -28,12 +28,6 @@ public class MealServlet extends HttpServlet {
     ));
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("PPPPPPPPPPPPPPPPPPPOST");
-        doGet(request, response);
-    }
-
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
@@ -44,7 +38,7 @@ public class MealServlet extends HttpServlet {
                 System.out.println("EEEEEEEEEEEEEDIT");
                 Meal meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
                 meals.add(meal);
-                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
+                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
                 break;
             case "delete":
                 //delete(request, response);
@@ -53,11 +47,11 @@ public class MealServlet extends HttpServlet {
                 System.out.println("AAAAAAAAAADD");
                 meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
                 meals.add(meal);
-                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
+                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
                 break;
             case "meals":
                 System.out.println("MMMMMMMMMMEALS");
-                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 5), 2000);
+                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
                 break;
             default:
                 System.out.println("DDDDDDDDEFAULT");
@@ -65,6 +59,25 @@ public class MealServlet extends HttpServlet {
         }
 
         request.setAttribute("meals", mealsLocal);
+        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        List<MealTo> mealsLocal;
+        Meal meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")),
+                request.getParameter("description"),
+                Integer.parseInt(request.getParameter("calories")));
+        meals.add(meal);
+        mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
+
+        request.setAttribute("meals", mealsLocal);
+        response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+        System.out.println("PPPPPPPPPPPPPPPPPPPOST1");
+        response.setHeader("Location", "meals?action=meals");
+        response.flushBuffer();
+        System.out.println("PPPPPPPPPPPPPPPPPPPOST2");
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 }
