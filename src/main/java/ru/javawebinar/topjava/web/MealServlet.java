@@ -35,10 +35,9 @@ public class MealServlet extends HttpServlet {
 
         switch (action) {
             case "edit":
-                System.out.println("EEEEEEEEEEEEEDIT");
+                System.out.println("EEEEEEEEEDIT");
                 Meal meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
-                meals.add(meal);
-                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
+                request.setAttribute("meal", meal);
                 break;
             case "delete":
                 //delete(request, response);
@@ -52,18 +51,19 @@ public class MealServlet extends HttpServlet {
             case "meals":
                 System.out.println("MMMMMMMMMMEALS");
                 mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
+                request.setAttribute("meals", mealsLocal);
                 break;
             default:
                 System.out.println("DDDDDDDDEFAULT");
                 break;
         }
 
-        request.setAttribute("meals", mealsLocal);
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //  РЕАЛИЗОВАТЬ РАЗБОР ПО ID : ЕСЛИ УЖЕ ЕСТЬ ТАКОЙ ID ТО ИЗМЕНЯЕМ ДАННЫЕ, ЕСЛИ НЕТ СОЗДАЕМ
         request.setCharacterEncoding("UTF-8");
         List<MealTo> mealsLocal;
         Meal meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")),
@@ -74,10 +74,9 @@ public class MealServlet extends HttpServlet {
 
         request.setAttribute("meals", mealsLocal);
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-        System.out.println("PPPPPPPPPPPPPPPPPPPOST1");
         response.setHeader("Location", "meals?action=meals");
         response.flushBuffer();
-        System.out.println("PPPPPPPPPPPPPPPPPPPOST2");
-        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+
+        //  request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 }

@@ -3,11 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Meals</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="style/styles.css">
-
 </head>
 <body>
 <h3><a href="index.html">Home</a></h3>
@@ -28,13 +27,13 @@
             </td>
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
-            <td><a class="edit" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+            <td><a onclick="edit()" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
             <td><a href="meals?action=delete" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-<button class="btn1" id="add">Добавить</button>
+<button class="btn1" onclick="add()">Добавить</button>
 
 <div id="modalWin">
     <form class="transparent" method="POST">
@@ -50,29 +49,24 @@
         </div>
     </form>
 </div>
+
 <script>
     let modal = document.getElementById('modalWin');
-    let btnAdd = document.getElementById('add');
-    let btnEdit = document.getElementsByClassName('edit');
 
-    btnAdd.onclick = function () {
+    function add() {
         document.getElementById("type").innerHTML = "ДОБАВИТЬ";
         modal.style.display = "block";
     }
 
-    btnEdit.onclick = function() {
-        for(let i = 0; i < btnEdit.length; ++i){
-            document.getElementById("type").innerHTML = "РЕДАКТИРОВАТЬ";
-            modal.style.display = "block";
-        }
+    function edit() {
+        document.getElementById("type").innerHTML = "РЕДАКТИРОВАТЬ";
+        modal.style.display = "block";
     }
 
     window.onclick = function(event) {
-        if (event.target === modal) {
+        if (event.target === modal)
             modal.style.display = "none";
-        }
     }
 </script>
-
 </body>
 </html>
