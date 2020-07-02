@@ -27,47 +27,12 @@
             </td>
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
-            <td><a href="meals?action=edit&datetime=<c:out value="${meal.dateTime}"/>&description=<c:out value="${meal.description}"/>&calories=<c:out value="${meal.calories}"/>" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+            <td><a href="meals?action=update&datetime=<c:out value="${meal.dateTime}"/>&description=<c:out value="${meal.description}"/>&calories=<c:out value="${meal.calories}"/>" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
             <td><a href="meals?action=delete" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
-<button class="btn1" onclick="add()">Добавить</button>
-
-<div id="modalWin">
-    <form class="transparent" method="POST">
-        <div class="form-inner">
-            <h3><span id="type"></span><a href="meals?action=meals"><i class="icon fa fa-times"></i></a></h3>
-            <label for="datetime">Дата/время</label>
-            <input id="datetime" type="datetime-local" max=now name="datetime" value="<c:out value="${meal.dateTime}" />">
-            <label for="description">Описание</label>
-            <input id="description" type="text" name="description" value="<c:out value="${meal.description}" />">
-            <label for="calories">Калории</label>
-            <input id="calories" type="number" name="calories" value="<c:out value="${meal.calories}" />">
-            <button class="btn2">Сохранить</button>
-        </div>
-    </form>
-</div>
-
-<script>
-    let modal = document.getElementById('modalWin');
-
-    function add() {
-        document.getElementById("type").innerHTML = "ДОБАВИТЬ";
-        modal.style.display = "block";
-    }
-
-    function edit() {
-        document.getElementById("type").innerHTML = "РЕДАКТИРОВАТЬ";
-        modal.style.display = "block";
-    }
-
-    window.onclick = function(event) {
-        if (event.target === modal)
-            modal.style.display = "none";
-    }
-</script>
-
+<a href="meals?action=create"><button class="btn1">Добавить</button></a>
 </body>
 </html>
