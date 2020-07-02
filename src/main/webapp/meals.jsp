@@ -27,7 +27,7 @@
             </td>
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
-            <td><a onclick="edit()" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+            <td><a href="meals?action=edit&datetime=<c:out value="${meal.dateTime}"/>&description=<c:out value="${meal.description}"/>&calories=<c:out value="${meal.calories}"/>" onclick="edit()"  style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
             <td><a href="meals?action=delete" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
         </tr>
     </c:forEach>
@@ -40,7 +40,7 @@
         <div class="form-inner">
             <h3><span id="type"></span><a href="meals?action=meals"><i class="icon fa fa-times"></i></a></h3>
             <label for="datetime">Дата/время</label>
-            <input id="datetime" type="datetime-local" name="datetime" value="<c:out value="${meal.dateTime}" />">
+            <input id="datetime" type="datetime-local" max=now name="datetime" value="<c:out value="${meal.dateTime}" />">
             <label for="description">Описание</label>
             <input id="description" type="text" name="description" value="<c:out value="${meal.description}" />">
             <label for="calories">Калории</label>
@@ -68,5 +68,6 @@
             modal.style.display = "none";
     }
 </script>
+
 </body>
 </html>

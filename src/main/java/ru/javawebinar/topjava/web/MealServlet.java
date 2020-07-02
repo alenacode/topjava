@@ -38,7 +38,8 @@ public class MealServlet extends HttpServlet {
                 System.out.println("EEEEEEEEEDIT");
                 Meal meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
                 request.setAttribute("meal", meal);
-                break;
+                request.getRequestDispatcher("/meals?action=meals").forward(request, response);
+                return;
             case "delete":
                 //delete(request, response);
                 break;
