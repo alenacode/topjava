@@ -31,24 +31,23 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        List<MealTo> mealsLocal = null;
-
+        List<MealTo> mealsLocal;
         switch (action) {
             case "edit":
                 System.out.println("EEEEEEEEEDIT");
                 Meal meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
                 request.setAttribute("meal", meal);
-                request.getRequestDispatcher("/meals?action=meals").forward(request, response);
+                request.getRequestDispatcher("/editForm.jsp").forward(request, response);
                 return;
             case "delete":
                 //delete(request, response);
                 break;
             case "add":
-                System.out.println("AAAAAAAAAADD");
+                System.out.println("AAAAAAAAAAADD");
                 meal = new Meal(LocalDateTime.parse(request.getParameter("datetime")), request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
-                meals.add(meal);
-                mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
-                break;
+                request.setAttribute("meal", meal);
+                request.getRequestDispatcher("/editForm.jsp").forward(request, response);
+                return;
             case "meals":
                 System.out.println("MMMMMMMMMMEALS");
                 mealsLocal = MealsUtil.filteredByStreams(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), 2000);
@@ -58,7 +57,7 @@ public class MealServlet extends HttpServlet {
                 System.out.println("DDDDDDDDEFAULT");
                 break;
         }
-
+        //  response.sendRedirect("meals.jsp");
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 
@@ -77,7 +76,5 @@ public class MealServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
         response.setHeader("Location", "meals?action=meals");
         response.flushBuffer();
-
-        //  request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 }
