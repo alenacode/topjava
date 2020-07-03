@@ -20,15 +20,16 @@
         <th></th>
     </tr>
     <c:forEach items="${meals}" var="meal">
+        <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
         <tr style="color:${meal.excess ? '#FFA500' : '#008000'}">
             <td>
                 <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${ parsedDateTime }"/>
+                <fmt:formatDate pattern="HH:mm dd-MM-yyyy" value="${ parsedDateTime }"/>
             </td>
-            <td><c:out value="${meal.description}"/></td>
-            <td><c:out value="${meal.calories}"/></td>
-            <td><a href="meals?action=update&datetime=<c:out value="${meal.dateTime}"/>&description=<c:out value="${meal.description}"/>&calories=<c:out value="${meal.calories}"/>" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
-            <td><a href="meals?action=delete" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+            <td><a href="meals?action=update&id=${meal.id}" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+            <td><a href="meals?action=delete&id=${meal.id}" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
         </tr>
     </c:forEach>
     </tbody>

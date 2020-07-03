@@ -11,13 +11,14 @@
 <div id="modalWin">
     <form class="transparent" method="POST">
         <div class="form-inner">
+            <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
             <h3><span id="type">Запись</span><a href="meals?action=read"><i class="icon fa fa-times"></i></a></h3>
             <label for="datetime">Дата/время</label>
-            <input id="datetime" type="datetime-local" name="datetime" value="<c:out value="${meal.dateTime}" />">
+            <input id="datetime" type="datetime-local" name="datetime" value="${meal.dateTime}">
             <label for="description">Описание</label>
-            <input id="description" type="text" name="description" value="<c:out value="${meal.description}" />">
+            <input id="description" type="text" name="description" value="${meal.description}">
             <label for="calories">Калории</label>
-            <input id="calories" type="number" name="calories" value="<c:out value="${meal.calories}" />">
+            <input id="calories" type="number" name="calories" value="${meal.calories}">
             <button class="btn2">Сохранить</button>
         </div>
     </form>
