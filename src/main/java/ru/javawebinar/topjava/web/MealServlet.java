@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class MealServlet extends HttpServlet {
     private UserMealRepository repository;
@@ -32,7 +33,7 @@ public class MealServlet extends HttpServlet {
             case "create":
             case "update":
                 System.out.println("CREATE OR EDIT");
-                meal = action.equals("create") ? new Meal(LocalDateTime.now(), "", 0) :
+                meal = action.equals("create") ? new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 0) :
                                                  repository.get(Integer.parseInt(request.getParameter("id")));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
