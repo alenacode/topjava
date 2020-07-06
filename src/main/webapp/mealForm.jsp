@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="modalWin">
-    <form class="transparent" method="POST">
+    <form class="transparent" method="POST" action="meals">
         <div class="form-inner">
             <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
             <input type="hidden" name="id" value="${meal.id}">

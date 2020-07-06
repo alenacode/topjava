@@ -32,14 +32,14 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
-        log.info("getAll");
-        return Collections.emptyList();
-    }
-
-    @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
         return null;
+    }
+
+    @Override
+    public List<User> getAll() {
+        log.info("getAll");
+        return Collections.emptyList();
     }
 }
