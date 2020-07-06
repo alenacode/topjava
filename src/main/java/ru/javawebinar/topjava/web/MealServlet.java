@@ -1,6 +1,10 @@
 package ru.javawebinar.topjava.web;
 
-import ru.javawebinar.topjava.model.MealTo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletConfig;
