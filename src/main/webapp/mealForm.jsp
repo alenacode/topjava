@@ -1,51 +1,28 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Meal</title>
-    <style>
-        dl {
-            background: none repeat scroll 0 0 #FAFAFA;
-            margin: 8px 0;
-            padding: 0;
-        }
-
-        dt {
-            display: inline-block;
-            width: 170px;
-        }
-
-        dd {
-            display: inline-block;
-            margin-left: 8px;
-            vertical-align: top;
-        }
-    </style>
+    <title>Meals</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
 </head>
 <body>
-<section>
-    <h3><a href="index.html">Home</a></h3>
-    <hr>
-    <h2>${param.action == 'create' ? 'Create meal' : 'Edit meal'}</h2>
-    <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <form method="post" action="meals">
-        <input type="hidden" name="id" value="${meal.id}">
-        <dl>
-            <dt>DateTime:</dt>
-            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required></dd>
-        </dl>
-        <dl>
-            <dt>Description:</dt>
-            <dd><input type="text" value="${meal.description}" size=40 name="description" required></dd>
-        </dl>
-        <dl>
-            <dt>Calories:</dt>
-            <dd><input type="number" value="${meal.calories}" name="calories" required></dd>
-        </dl>
-        <button type="submit">Save</button>
-        <button onclick="window.history.back()" type="button">Cancel</button>
+<div id="modalWin">
+    <form class="transparent" method="POST">
+        <div class="form-inner">
+            <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
+            <input type="hidden" name="id" value="${meal.id}">
+            <h3><span id="type">Запись</span><a href="meals?action=read"><i class="icon fa fa-times"></i></a></h3>
+            <label for="datetime">Дата/время</label>
+            <input id="datetime" type="datetime-local" name="dateTime" value="${meal.dateTime}">
+            <label for="description">Описание</label>
+            <input id="description" type="text" name="description" value="${meal.description}">
+            <label for="calories">Калории</label>
+            <input id="calories" type="number" name="calories" value="${meal.calories}">
+            <button class="btn2">Сохранить</button>
+        </div>
     </form>
-</section>
+</div>
 </body>
 </html>
