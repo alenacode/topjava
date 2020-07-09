@@ -34,6 +34,44 @@
     </c:forEach>
     </tbody>
 </table>
+<button class="btn3" id="filterBtn">Отфильтровать</button>
 <a href="meals?action=create"><button class="btn1">Добавить</button></a>
+
+<div id="modalWinFilter">
+    <form class="transparent" method="GET" action="meals?action=read">
+        <div class="form-inner">
+            <h3><span id="type">Фильтр</span><a href="meals?action=read"><i class="icon fa fa-times"></i></a></h3>
+
+            <label for="dateFrom">Дата ОТ</label>
+            <input id="dateFrom" type="date" name="dateFrom">
+
+            <label for="dateTo">Дата ДО</label>
+            <input id="dateTo" type="date" name="dateTo">
+
+            <label for="timeFrom">Время ОТ</label>
+            <input id="timeFrom" type="time" name="timeFrom">
+
+            <label for="timeTo">Время ДО</label>
+            <input id="timeTo" type="time" name="timeTo">
+
+            <button class="btn2">Отфильтровать</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let modal = document.getElementById('modalWinFilter');
+    let btn = document.getElementById('filterBtn');
+
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    window.onclick = function(event) {
+        if (event.target === modal)
+            modal.style.display = "none";
+    }
+</script>
+
 </body>
 </html>
