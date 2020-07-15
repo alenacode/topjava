@@ -2,15 +2,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Java Enterprise (Topjava)</title>
+    <link rel="stylesheet" type="text/css" href="style/style.css">
 </head>
 <body>
-<h3>Проект <a href="https://github.com/JavaWebinar/topjava" target="_blank">Java Enterprise (Topjava)</a></h3>
-<hr>
-<ul>
-    <li><a href="users">Users</a></li>
-    <li><a href="meals">Meals</a></li>
-    <li><a href="meals?userId=1">1</a></li>
-    <li><a href="meals?userId=2">2</a></li>
-</ul>
+<header>
+    <h3><a href="https://github.com/JavaWebinar/topjava" target="_blank">Проект Java Enterprise (Topjava)</a></h3>
+</header>
+<div class="container">
+    <form method="POST" action="users">
+        Login as:
+        <br>
+        <select name="userId">
+            <option value="1" selected>User</option>
+            <option value="2">Admin</option>
+        </select>
+        <button class="btn2">Выбрать</button>
+    </form>
+    <ul>
+        <li><a href="users">Users</a></li>
+        <li><a href="meals">Meals</a></li>
+    </ul>
+</div>
+<footer>
+    MADE BY ALENA
+</footer>
 </body>
 </html>

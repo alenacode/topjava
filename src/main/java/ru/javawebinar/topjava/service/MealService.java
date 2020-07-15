@@ -2,48 +2,46 @@ package ru.javawebinar.topjava.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
-import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
 @Service
 public class MealService {
-    private static final Logger log = LoggerFactory.getLogger(MealService.class);
-
     private final MealRepository repository;
 
     public MealService (MealRepository repository) {
         this.repository = repository;
     }
 
-    public Meal create(Meal meal) {
-        log.info("CREATE {}", meal);
-        return repository.save(meal);
+    public Meal create(Meal meal, int userId) {
+        return repository.save(meal, userId);
     }
 
-    public void update(Meal meal) {
-        log.info("UPDATE {}", meal);
-        checkNotFoundWithId(repository.save(meal), authUserId());
+    public void update(Meal meal, int userId) {
+        checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 
-    public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), authUserId());
+    public void delete(int id, int userId) {
+        checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
-    public Meal get(int id) {
-        return checkNotFoundWithId(repository.get(id), authUserId());
+    public Meal get(int id, int userId) {
+        return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
-    public List<Meal> getAll() {
-        /*List<Meal> meals = repository.getAll().stream()
-                                              .filter(meal -> meal.getUserId().equals(authUserId()))
-                                              .collect(Collectors.toList());
-        log.info("GET_ALL {}", meals);*/
-        return checkNotFoundWithId(repository.getAll(), authUserId());
+    public List<Meal> getAll(int userId) {
+        return repository.getAll(userId);
+    }
+
+    public List<Meal> getBetweenHalfOpen (@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
+        return repository.getBetweenHalfOpen(DateTimeUtil.getStartExclusive(startDate), DateTimeUtil.getEndExclusive(endDate), userId);
     }
 }

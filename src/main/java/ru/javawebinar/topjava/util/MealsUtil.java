@@ -281,4 +281,23 @@ public class MealsUtil {
     private static MealTo createTo(Meal meal, boolean excess) {
         return new MealTo(meal.getId(), meal.getUserId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
+
+    public static List<MealTo> getFilteredTos(List<Meal> meals, int authUserCaloriesPerDay, LocalTime startTime, LocalTime endTime) {
+        //return filterByPredicate(meals, authUserCaloriesPerDay, meal -> Util.isBetweenHalfOpen( startTime, endTime));
+        return getTos(meals, authUserCaloriesPerDay).stream()
+                .filter(meal -> Util.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
+                .collect(Collectors.toList());
+    }
+
+    public static List<MealTo> getTos(List<Meal> meals, int authUserCaloriesPerDay) {
+        Map<LocalDate, Integer> caloriesSumByDate = meals.stream().collect(Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)));
+        return meals.stream()
+                .map(meal -> new MealTo(meal.getId(),
+                        meal.getUserId(),
+                        meal.getDateTime(),
+                        meal.getDescription(),
+                        meal.getCalories(),
+                        caloriesSumByDate.get(meal.getDate()) > authUserCaloriesPerDay))
+                .collect(Collectors.toList());
+    }
 }

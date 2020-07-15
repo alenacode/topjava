@@ -9,17 +9,21 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepository implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
-    private Map<Integer, User> repository = new ConcurrentHashMap<>();
+    private Map<Integer, User> usersMap = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
+
+    public static final int USER_ID = 1;
+    public static final int ADMIN_ID = 2;
 
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
-        return repository.remove(id) != null;
+        return usersMap.remove(id) != null;
     }
 
     @Override
@@ -27,32 +31,30 @@ public class InMemoryUserRepository implements UserRepository {
         log.info("save {}", user);
         if (user.isNew()) {
             user.setId(counter.incrementAndGet());
-            repository.put(user.getId(), user);
+            usersMap.put(user.getId(), user);
             return user;
         }
 
-        return repository.computeIfPresent(user.getId(), (id, oldMeal) -> user);
+        return usersMap.computeIfPresent(user.getId(), (id, oldMeal) -> user);
     }
 
     @Override
     public User get(int id) {
         log.info("get {}", id);
-        return repository.get(id);
+        return usersMap.get(id);
     }
 
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-        Optional<User> optionalUser = repository.values()
-                                                .stream()
-                                                .filter(user -> user.getEmail().equalsIgnoreCase(email))
-                                                .findFirst();
-        return optionalUser.orElse(null);
+        return getAll().stream().filter(user -> user.getEmail().equalsIgnoreCase(email)).findFirst().orElse(null);
     }
 
     @Override
     public List<User> getAll() {
         log.info("getAll");
-        return new ArrayList<>(repository.values());
+        return usersMap.values().stream()
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
+                .collect(Collectors.toList());
     }
 }

@@ -8,28 +8,54 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
-import static ru.javawebinar.topjava.web.SecurityUtil.setId;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
-    MealRestController mealRestController = appCtx.getBean(MealRestController.class);
+    private ConfigurableApplicationContext springContext;
+    private MealRestController mealRestController;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        mealRestController = springContext.getBean(MealRestController.class);
+    }
+
+    @Override
+    public void destroy() {
+        springContext.close();
+        super.destroy();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
         switch (action == null ? "read" : action) {
+            case "filter":
+                log.info("Filter");
+                LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
+                LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
+                LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
+                LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
+                request.setAttribute("meals", mealRestController.getBetweenHalfOpen(startDate, startTime, endDate, endTime));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
@@ -47,12 +73,7 @@ public class MealServlet extends HttpServlet {
             case "read":
             default:
                 log.info("getAll");
-                String dateFrom = request.getParameter("dateFrom");
-                String dateTo = request.getParameter("dateTo");
-                String timeFrom = request.getParameter("timeFrom");
-                String timeTo = request.getParameter("timeTo");
-                request.setAttribute("meals", dateFrom == null && timeFrom == null ?
-                        mealRestController.getAll() :  mealRestController.getAll(timeFrom, timeTo, dateFrom, dateTo));
+                request.setAttribute("meals", mealRestController.getAll());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
@@ -73,7 +94,7 @@ public class MealServlet extends HttpServlet {
         if (meal.isNew())
             mealRestController.create(meal);
         else
-            mealRestController.update(meal);
+            mealRestController.update(meal, meal.getId());
 
         response.sendRedirect("meals");
     }

@@ -1,9 +1,13 @@
 package ru.javawebinar.topjava.util;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class DateTimeUtil {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -12,9 +16,22 @@ public class DateTimeUtil {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) < 0;
     }
 
-    public static boolean isBetweenHalfOpen(LocalTime lt, LocalTime startTime, LocalTime endTime, LocalDate ld, LocalDate startDate, LocalDate endDate) {
-        return ld.compareTo(startDate) >= 0 && ld.compareTo(endDate) <= 0
-                && lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
+    private static final LocalDateTime MIN_DATE = LocalDateTime.of(1, 1, 1, 0, 0);
+    public static LocalDateTime getStartExclusive (LocalDate localDate) {
+        return localDate != null ? localDate.atStartOfDay() : MIN_DATE;
+    }
+
+    private static final LocalDateTime MAX_DATE = LocalDateTime.of(3000, 1, 1, 0, 0);
+    public static LocalDateTime getEndExclusive (LocalDate localDate) {
+        return localDate != null ? localDate.plus(1, ChronoUnit.DAYS).atStartOfDay() : MAX_DATE;
+    }
+
+    public static @Nullable LocalDate parseLocalDate (@Nullable String localDate) {
+        return StringUtils.isEmpty(localDate) ? null : LocalDate.parse(localDate);
+    }
+
+    public static @Nullable LocalTime parseLocalTime (@Nullable String localTime) {
+        return StringUtils.isEmpty(localTime) ? null : LocalTime.parse(localTime);
     }
 
     public static String toString(LocalDateTime ldt) {
