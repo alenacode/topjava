@@ -20,7 +20,7 @@
         <th></th>
     </tr>
     <c:forEach items="${meals}" var="meal">
-        <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
+        <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
         <tr style="color:${meal.excess ? '#FFA500' : '#008000'}">
             <td>
                 <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
