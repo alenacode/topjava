@@ -1,6 +1,9 @@
 package ru.javawebinar.topjava.web.user;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -10,6 +13,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Arrays;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 public class InMemoryAdminRestControllerTest {
@@ -41,11 +46,11 @@ public class InMemoryAdminRestControllerTest {
     @Test
     public void delete() throws Exception {
         controller.delete(USER_ID);
-        Assert.assertNull(repository.get(USER_ID));
+        assertNull(repository.get(USER_ID));
     }
 
     @Test
     public void deleteNotFound() throws Exception {
-        Assert.assertThrows(NotFoundException.class, () -> controller.delete(10));
+        assertThrows(NotFoundException.class, () -> controller.delete(10));
     }
 }

@@ -9,11 +9,11 @@
 </head>
 <body>
 <div id="modalWin">
-    <form class="transparent" method="POST">
+    <form class="transparent" method="POST" action="meals">
         <div class="form-inner">
             <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
             <input type="hidden" name="id" value="${meal.id}">
-            <h3><span id="type">Запись</span><a href="meals?action=read"><i class="icon fa fa-times"></i></a></h3>
+            <h3><span id="type">Запись</span><a href="meals"><i class="icon fa fa-times"></i></a></h3>
             <label for="datetime">Дата/время</label>
             <input id="datetime" type="datetime-local" name="dateTime" value="${meal.dateTime}">
             <label for="description">Описание</label>

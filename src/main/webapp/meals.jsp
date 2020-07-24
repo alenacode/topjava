@@ -9,31 +9,73 @@
     <link rel="stylesheet" type="text/css" href="style/style.css">
 </head>
 <body>
-<h3><a href="index.html">Home</a></h3>
-<h2>Meals</h2>
-<table>
-    <tr>
-        <th>Дата/время</th>
-        <th>Описание</th>
-        <th>Калории</th>
-        <th></th>
-        <th></th>
-    </tr>
-    <c:forEach items="${meals}" var="meal">
-        <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
-        <tr style="color:${meal.excess ? '#FFA500' : '#008000'}">
-            <td>
-                <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
-                <fmt:formatDate pattern="HH:mm dd-MM-yyyy" value="${ parsedDateTime }"/>
-            </td>
-            <td>${meal.description}</td>
-            <td>${meal.calories}</td>
-            <td><a href="meals?action=update&id=${meal.id}" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
-            <td><a href="meals?action=delete&id=${meal.id}" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+<header>
+    <h3><a href="index.html">HOME</a></h3>
+</header>
+<div class="container">
+    <h2>Meals</h2>
+    <table>
+        <tr>
+            <th>Дата/время</th>
+            <th>Описание</th>
+            <th>Калории</th>
+            <th></th>
+            <th></th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
-<a href="meals?action=create"><button class="btn1">Добавить</button></a>
+        <c:forEach items="${meals}" var="meal">
+            <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
+            <tr style="color:${meal.excess ? '#FFA500' : '#008000'}">
+                <td>
+                    <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+                    <fmt:formatDate pattern="HH:mm dd-MM-yyyy" value="${ parsedDateTime }"/>
+                </td>
+                <td>${meal.description}</td>
+                <td>${meal.calories}</td>
+                <td><a href="meals?action=update&id=${meal.id}" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+                <td><a href="meals?action=delete&id=${meal.id}" style="color:${meal.excess ? '#FFA500' : '#008000'}"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    <button class="btn3" id="filterBtn">Отфильтровать</button>
+    <a href="meals?action=create"><button class="btn1">Добавить</button></a>
+
+    <div id="modalWinFilter">
+        <form class="transparent" method="GET" action="meals">
+            <div class="form-inner">
+                <input type="hidden" name="action" value="filter">
+                <h3><span id="type">Фильтр</span><a href="meals?action=read"><i class="icon fa fa-times"></i></a></h3>
+
+                <label for="dateFrom">Дата ОТ</label>
+                <input id="dateFrom" type="date" name="dateFrom" value="${param.startDate}">
+
+                <label for="dateTo">Дата ДО</label>
+                <input id="dateTo" type="date" name="dateTo" value="${param.endDate}">
+
+                <label for="timeFrom">Время ОТ</label>
+                <input id="timeFrom" type="time" name="timeFrom" value="${param.startTime}">
+
+                <label for="timeTo">Время ДО</label>
+                <input id="timeTo" type="time" name="timeTo" value="${param.endTime}">
+
+                <button class="btn2">Отфильтровать</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    let modal = document.getElementById('modalWinFilter');
+    let btn = document.getElementById('filterBtn');
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+    window.onclick = function(event) {
+        if (event.target === modal)
+            modal.style.display = "none";
+    }
+</script>
+
 </body>
 </html>
