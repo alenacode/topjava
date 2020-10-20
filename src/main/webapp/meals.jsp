@@ -47,16 +47,16 @@
                 <h3><span id="type">Фильтр</span><a href="meals?action=read"><i class="icon fa fa-times"></i></a></h3>
 
                 <label for="dateFrom">Дата ОТ</label>
-                <input id="dateFrom" type="date" name="dateFrom" value="${param.startDate}">
+                <input id="dateFrom" type="date" name="startDate" value="${param.startDate}">
 
                 <label for="dateTo">Дата ДО</label>
-                <input id="dateTo" type="date" name="dateTo" value="${param.endDate}">
+                <input id="dateTo" type="date" name="endDate" value="${param.endDate}">
 
                 <label for="timeFrom">Время ОТ</label>
-                <input id="timeFrom" type="time" name="timeFrom" value="${param.startTime}">
+                <input id="timeFrom" type="time" name="startTime" value="${param.startTime}">
 
                 <label for="timeTo">Время ДО</label>
-                <input id="timeTo" type="time" name="timeTo" value="${param.endTime}">
+                <input id="timeTo" type="time" name="endTime" value="${param.endTime}">
 
                 <button class="btn2">Отфильтровать</button>
             </div>
