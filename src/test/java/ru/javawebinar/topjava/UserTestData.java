@@ -26,6 +26,9 @@ public class UserTestData {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         updated.setCaloriesPerDay(330);
+        updated.setPassword("newPass");
+        updated.setEnabled(false);
+        updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
     }
 
