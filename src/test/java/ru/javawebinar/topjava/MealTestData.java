@@ -2,43 +2,38 @@ package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
 
-import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static java.time.LocalDateTime.of;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
-    // 5.1 Сделать тестовые данные MealTestData (точно такие же, как вставляем в populateDB.sql).
-    public static final int NOT_FOUND = 100000;         // id of non existing meal
-    public static final int USER_ID = START_SEQ;
-    public static final int ADMIN_ID = START_SEQ + 1;
-    public static LocalDateTime ldt1 = LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0, 0);
-    public static LocalDateTime ldt2 = LocalDateTime.of(2020, Month.JANUARY, 31, 20, 1, 0);
-    public static final Meal MEAL_USER = new Meal(1, ldt1, "description_user", 300);
-    public static final Meal MEAL_ADMIN = new Meal(2, ldt2, "description_admin", 500);
+    public static TestMatcher<Meal> MEAL_MATCHER = TestMatcher.usingFieldsComparator();
+
+    public static final int NOT_FOUND = 10;
+    public static final int MEAL1_ID = START_SEQ + 2;
+    public static final int ADMIN_MEAL_ID = START_SEQ + 9;
+
+    public static final Meal meal1 = new Meal(MEAL1_ID, of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500);
+    public static final Meal meal2 = new Meal(MEAL1_ID + 1, of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
+    public static final Meal meal3 = new Meal(MEAL1_ID + 2, of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500);
+    public static final Meal meal4 = new Meal(MEAL1_ID + 3, of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100);
+    public static final Meal meal5 = new Meal(MEAL1_ID + 4, of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 500);
+    public static final Meal meal6 = new Meal(MEAL1_ID + 5, of(2020, Month.JANUARY, 31, 13, 0), "Обед", 1000);
+    public static final Meal meal7 = new Meal(MEAL1_ID + 6, of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 510);
+    public static final Meal admin_meal1 = new Meal(ADMIN_MEAL_ID, of(2020, Month.JANUARY, 31, 14, 0), "Админ ланч", 510);
+    public static final Meal admin_meal2 = new Meal(ADMIN_MEAL_ID + 1, of(2020, Month.JANUARY, 31, 21, 0), "Админ ужин", 1500);
+
+    public static final List<Meal> meals = Arrays.asList(meal7, meal6, meal5, meal4, meal3, meal2, meal1);
 
     public static Meal getNew() {
-        return new Meal(ldt2.plusMinutes(1), "NEW Завтрак", 800);
+        return new Meal(null, of(2020, Month.FEBRUARY, 1, 18, 0), "Созданный ужин", 300);
     }
 
     public static Meal getUpdated() {
-        Meal updated = MEAL_USER;
-        updated.setDescription("UPDATED description_user");
-        updated.setCalories(444);
-        return updated;
-    }
-
-    public static void assertMatch(Meal actual, Meal expected) {
-        assertThat(actual).isEqualToComparingFieldByField(expected);
-    }
-
-    public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
-        assertMatch(actual, Arrays.asList(expected));
-    }
-
-    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
-        assertThat(actual).containsExactlyElementsOf(expected);
+        return new Meal(MEAL1_ID, meal1.getDateTime().plus(2, ChronoUnit.MINUTES), "Обновленный завтрак", 200);
     }
 }
