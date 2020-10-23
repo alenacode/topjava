@@ -35,12 +35,13 @@ public class UserServiceTest {
 
     @Test
     public void create() throws Exception {
+        User created = service.create(getNew());
+        int newId = created.id();
         User newUser = getNew();
-        User created = service.create(newUser);
-        Integer newId = created.getId();
         newUser.setId(newId);
-        assertMatch(created, newUser);
         assertMatch(service.get(newId), newUser);
+        USER_MATCHER.assertMatch(created, newUser);
+        USER_MATCHER.assertMatch(service.get(newId), newUser);
     }
 
     @Test
@@ -81,12 +82,12 @@ public class UserServiceTest {
     public void update() throws Exception {
         User updated = getUpdated();
         service.update(updated);
-        assertMatch(service.get(USER_ID), updated);
+        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
     }
 
     @Test
     public void getAll() throws Exception {
         List<User> all = service.getAll();
-        assertMatch(all, ADMIN, USER);
+        USER_MATCHER.assertMatch(all, ADMIN, USER);
     }
 }
