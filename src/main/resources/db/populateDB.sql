@@ -14,5 +14,5 @@ INSERT INTO user_roles (role, user_id) VALUES
 
 INSERT INTO meals (user_id, datetime, description, calories) VALUES
     (100000, TIMESTAMP '2020-01-31 20:00:00', 'description_user', 300),
-    (100000, TIMESTAMP '2020-01-31 20:01:00', 'description_admin', 500);
+    (100001, TIMESTAMP '2020-01-31 20:01:00', 'description_admin', 500);
 
