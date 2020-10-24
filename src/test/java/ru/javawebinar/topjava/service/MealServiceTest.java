@@ -1,16 +1,25 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
+import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.time.Month;
 
@@ -25,7 +34,26 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Transactional
 public class MealServiceTest {
+    @Autowired
+    private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
+
+    @Rule
+    public TestName name = new TestName();
+    private long start;
+
+    @Before
+    public void start() {
+        start = System.currentTimeMillis();
+    }
+
+    @After
+    public void end() {
+        long end = System.currentTimeMillis() - start;
+        log.info("test {} took {} ms", name.getMethodName(), end);
+        System.out.println("Test " + name.getMethodName() + " took " + end + " ms");
+    }
 
     @Autowired
     private MealService service;
@@ -33,7 +61,7 @@ public class MealServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(MEAL1_ID, USER_ID);
-        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, USER_ID));
+        assertThrows(NoResultException.class, () -> service.get(MEAL1_ID, USER_ID));
     }
 
     @Test
@@ -62,7 +90,6 @@ public class MealServiceTest {
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
     }
 
-
     @Test
     public void get() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
@@ -71,12 +98,12 @@ public class MealServiceTest {
 
     @Test
     public void getNotFound() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, USER_ID));
+        assertThrows(NoResultException.class, () -> service.get(NOT_FOUND, USER_ID));
     }
 
     @Test
     public void getNotOwn() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
+        assertThrows(NoResultException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
     }
 
     @Test

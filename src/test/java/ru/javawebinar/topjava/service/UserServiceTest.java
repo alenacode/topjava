@@ -39,7 +39,6 @@ public class UserServiceTest {
         int newId = created.id();
         User newUser = getNew();
         newUser.setId(newId);
-        assertMatch(service.get(newId), newUser);
         USER_MATCHER.assertMatch(created, newUser);
         USER_MATCHER.assertMatch(service.get(newId), newUser);
     }
@@ -75,7 +74,7 @@ public class UserServiceTest {
     @Test
     public void getByEmail() throws Exception {
         User user = service.getByEmail("admin@gmail.com");
-        assertMatch(user, ADMIN);
+        USER_MATCHER.assertMatch(user, ADMIN);
     }
 
     @Test
