@@ -34,7 +34,7 @@ public class UserServiceTest {
     private UserRepository repository;
 
     @Test
-    public void create() throws Exception {
+    public void create() {
         User created = service.create(getNew());
         int newId = created.id();
         User newUser = getNew();
@@ -45,48 +45,48 @@ public class UserServiceTest {
     }
 
     @Test
-    public void duplicateMailCreate() throws Exception {
+    public void duplicateMailCreate() {
         assertThrows(DataAccessException.class, () ->
                 service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.USER)));
     }
 
     @Test
-    public void delete() throws Exception {
+    public void delete() {
         service.delete(USER_ID);
         assertNull(repository.get(USER_ID));
     }
 
     @Test
-    public void deletedNotFound() throws Exception {
+    public void deletedNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND));
     }
 
     @Test
-    public void get() throws Exception {
+    public void get() {
         User user = service.get(USER_ID);
         USER_MATCHER.assertMatch(user, USER);
     }
 
     @Test
-    public void getNotFound() throws Exception {
+    public void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
     }
 
     @Test
-    public void getByEmail() throws Exception {
+    public void getByEmail() {
         User user = service.getByEmail("admin@gmail.com");
         assertMatch(user, ADMIN);
     }
 
     @Test
-    public void update() throws Exception {
+    public void update() {
         User updated = getUpdated();
         service.update(updated);
         USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void getAll() {
         List<User> all = service.getAll();
         USER_MATCHER.assertMatch(all, ADMIN, USER);
     }
